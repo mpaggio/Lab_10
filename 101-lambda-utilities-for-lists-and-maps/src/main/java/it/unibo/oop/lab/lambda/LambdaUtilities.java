@@ -2,6 +2,7 @@ package it.unibo.oop.lab.lambda;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -12,6 +13,7 @@ import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import com.google.common.collect.Sets;
 
 /**
  * This class will contain four utility functions on lists and maps, of which the first one is provided as example.
@@ -82,7 +84,9 @@ public final class LambdaUtilities {
         /*
          * Suggestion: consider Map.merge
          */
-        return null;
+        final Map<R, Set<T>> newMap = new LinkedHashMap<>();
+        list.forEach(o -> newMap.merge(op.apply(o), Set.of(o), Sets::union));
+        return newMap;
     }
 
     /**
