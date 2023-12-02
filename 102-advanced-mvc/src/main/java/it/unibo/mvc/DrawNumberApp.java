@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.StringTokenizer;
 
 /**
@@ -37,7 +38,7 @@ public final class DrawNumberApp implements DrawNumberViewObserver {
             view.start();
         }
 
-        try (var configFileStream = new BufferedReader(new InputStreamReader(configFileInputStream))) {
+        try (var configFileStream = Objects.requireNonNull(new BufferedReader(new InputStreamReader(configFileInputStream)))) {
             for (String fileLine = configFileStream.readLine(); fileLine != null; fileLine = configFileStream.readLine()) {
                 final StringTokenizer st = new StringTokenizer(fileLine, ": ");
                 final String configurationName = st.nextToken();
@@ -50,7 +51,7 @@ public final class DrawNumberApp implements DrawNumberViewObserver {
                     configBuilder.setAttempts(Integer.parseInt(configurationValue));
                 }
             }
-        } catch (IOException | NullPointerException e) {
+        } catch (IOException e) {
             displayError(e.getMessage());
         }
         config = configBuilder.build();
