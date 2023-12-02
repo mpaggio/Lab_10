@@ -18,10 +18,12 @@ public final class DrawNumberApp implements DrawNumberViewObserver {
     private final List<DrawNumberView> views;
 
     /**
+     * @param fileName
+     *            path of the file to read
      * @param views
      *            the views to attach
      */
-    public DrawNumberApp(final String fileName, final DrawNumberView... views) throws FileNotFoundException{
+    public DrawNumberApp(final String fileName, final DrawNumberView... views) throws FileNotFoundException {
         final Configuration.Builder configBuilder = new Configuration.Builder();
         final Configuration config;
         final File configFile = new File(fileName);
@@ -35,36 +37,37 @@ public final class DrawNumberApp implements DrawNumberViewObserver {
             view.start();
         }
 
-        try(var configFileStream = new BufferedReader(new InputStreamReader(configFileInputStream))) {
-            for(String fileLine = configFileStream.readLine(); fileLine != null ; fileLine = configFileStream.readLine()){
-                StringTokenizer st = new StringTokenizer(fileLine, ": ");
-                String configurationName = st.nextToken();
-                String configurationValue = st.nextToken();
-                if(configurationName.equals("minimum")){
+        try (var configFileStream = new BufferedReader(new InputStreamReader(configFileInputStream))) {
+            for (String fileLine = configFileStream.readLine(); fileLine != null; fileLine = configFileStream.readLine()) {
+                final StringTokenizer st = new StringTokenizer(fileLine, ": ");
+                final String configurationName = st.nextToken();
+                final String configurationValue = st.nextToken();
+                if (configurationName.contains("minimum")) {
                     configBuilder.setMin(Integer.parseInt(configurationValue));
-                } else if(configurationName.equals("maximum")){
+                } else if (configurationName.contains("maximum")) {
                     configBuilder.setMax(Integer.parseInt(configurationValue));
-                } else if(configurationName.equals("attempts")){
-                    configBuilder.setAttempts(Integer.parseInt(configurationValue));    
+                } else if (configurationName.contains("attempts")) {
+                    configBuilder.setAttempts(Integer.parseInt(configurationValue));
                 }
             }
-        } catch(IOException | NullPointerException e) {
+        } catch (IOException | NullPointerException e) {
             displayError(e.getMessage());
         }
-        
         config = configBuilder.build();
-        if(config.isConsistent()){
+        if (config.isConsistent()) {
             this.model = new DrawNumberImpl(config);
         } else {
             displayError("Configuration is not consistent");
             this.model = new DrawNumberImpl(new Configuration.Builder().build());
         }
-        
-
     }
 
-    private void displayError(final String message){
-        for(final DrawNumberView view : views){
+    /**
+     * @param message
+     *          message to be displayed
+     */
+    private void displayError(final String message) {
+        for (final DrawNumberView view : views) {
                 view.displayError(message);
             }
     }

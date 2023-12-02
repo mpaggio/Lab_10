@@ -59,7 +59,7 @@ public final class PrintStreamView implements DrawNumberView {
     }
 
     @Override
-    public void displayError(String message) {
+    public void displayError(final String message) {
         out.println(message);
     }
 
