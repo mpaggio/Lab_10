@@ -70,28 +70,33 @@ public final class Configuration {
         private int min = MIN;
         private int max = MAX;
         private int attempts = ATTEMPTS;
-        //Consumed was initialized false, but that's the default initalization for a non initialized boolean field
-        private boolean consumed; 
+        private boolean consumed = false;
 
         /**
          * @param min the minimum value
+         * @return this builder, for method chaining
          */
-        public void setMin(final int min) {
+        public Builder setMin(final int min) {
             this.min = min;
+            return this;
         }
 
         /**
          * @param max the maximum value
+         * @return this builder, for method chaining
          */
-        public void setMax(final int max) {
+        public Builder setMax(final int max) {
             this.max = max;
+            return this;
         }
 
         /**
          * @param attempts the attempts count
+         * @return this builder, for method chaining
          */
-        public void setAttempts(final int attempts) {
+        public Builder setAttempts(final int attempts) {
             this.attempts = attempts;
+            return this;
         }
 
         /**
@@ -106,4 +111,3 @@ public final class Configuration {
         }
     }
 }
-
